@@ -24,6 +24,9 @@ public class AZDropdownMenu: UIView {
 
     /// The handler used when menu item is tapped
     public var cellTapHandler : ((indexPath:NSIndexPath) -> Void)?
+
+    // The handler used when the overlay is tapped
+    public var overlayTapHandler : (() -> Void)?
     
     // MARK: - Configuration options
 
@@ -190,7 +193,7 @@ public class AZDropdownMenu: UIView {
 
     private func initOverlay() {
         let frame = UIScreen.mainScreen().bounds
-        overlay.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)
+        overlay.frame = CGRectMake(frame.origin.x, frame.origin.y + 66, frame.size.width, frame.size.height)
         overlay.backgroundColor = self.overlayColor
         overlay.accessibilityIdentifier = "OVERLAY"
         overlay.alpha = 0
@@ -202,7 +205,7 @@ public class AZDropdownMenu: UIView {
 
     private func initMenu() {
         let frame = UIScreen.mainScreen().bounds
-        let menuFrame = CGRectMake(0, 0, frame.size.width, menuHeight)
+        let menuFrame = CGRectMake(0, 66, frame.size.width, menuHeight)
 
         menuView = UITableView(frame: menuFrame, style: .Plain)
         menuView.userInteractionEnabled = true
@@ -242,7 +245,8 @@ public class AZDropdownMenu: UIView {
     }
     
     func overlayTapped() {
-        hideMenu()
+        overlayTapHandler?()
+	hideMenu()
     }
 
     //MARK: - Public methods to control the menu
